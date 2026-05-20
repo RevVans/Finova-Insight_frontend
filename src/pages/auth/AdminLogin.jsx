@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MdAdminPanelSettings } from 'react-icons/md';
 
-export default function Login() {
+export default function AdminLogin() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = (e) => {
         e.preventDefault();
-        // Here you would normally add authentication logic
+        // Here you would normally add authentication logic for admin
         // For now, we simulate a successful login and navigate to the dashboard
         navigate('/');
     };
@@ -28,13 +28,13 @@ export default function Login() {
                 </div>
 
                 {/* Heading */}
-                <h2 className="text-2xl font-bold text-center text-black mb-8 tracking-wide">LOGIN</h2>
+                <h2 className="text-2xl font-bold text-center text-black mb-8 tracking-wide">LOGIN ADMIN</h2>
 
                 {/* Form */}
                 <form onSubmit={handleLogin} className="flex flex-col gap-4">
                     <input 
                         type="text" 
-                        placeholder="username" 
+                        placeholder="admin username" 
                         className="bg-[#D9D9D9] text-gray-800 placeholder-gray-500 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 w-full font-medium"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -57,19 +57,6 @@ export default function Login() {
                         Login
                     </button>
                 </form>
-
-                {/* Register Link */}
-                <div className="mt-6 text-center">
-                    <p className="text-sm text-black mb-3">Belum memiliki akun?</p>
-                    <Link to="/register">
-                        <button 
-                            type="button" 
-                            className="bg-white text-black font-medium px-4 py-3 w-full rounded-md border border-black hover:bg-gray-50 transition-colors"
-                        >
-                            Daftar
-                        </button>
-                    </Link>
-                </div>
             </div>
         </div>
     );

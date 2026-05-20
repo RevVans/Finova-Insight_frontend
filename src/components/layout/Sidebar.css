@@ -1,0 +1,171 @@
+/* Sidebar.css */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Changed from flex-end for better alignment of children */
+    padding: 40px 24px;
+    gap: 24px;
+
+    width: 240px;
+    height: 100vh;
+    box-sizing: border-box;
+
+    background: #FFFFFF;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    position: sticky;
+    top: 0;
+}
+
+.sidebar-logo-container {
+    width: 192px;
+    height: 63px;
+    flex: none;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-logo-img {
+    width: 45px;
+    height: 45px;
+}
+
+.sidebar-logo-text {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    margin-left: 8px;
+}
+
+.sidebar-menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    
+    width: 192px;
+    
+    align-self: stretch;
+    flex: 1; /* Replace height 100% with flex 1 to fill remaining space */
+    justify-content: space-between; /* This pushes the profile to the bottom */
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    width: 192px;
+}
+
+.sidebar-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    gap: 9px;
+
+    width: 192px;
+    height: 40px;
+
+    border-radius: 10px;
+    text-decoration: none;
+    color: #1C1B1F;
+    box-sizing: border-box;
+    transition: background 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background: #f0f0f0;
+}
+
+.sidebar-item.active {
+    background: #1C1B1F;
+    color: #FFFFFF;
+}
+
+.sidebar-item.active:hover {
+    background: #1C1B1F;
+}
+
+.sidebar-item.active .sidebar-text {
+    color: #FFFFFF;
+}
+
+.sidebar-icon-box {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* The active icon CSS filter is removed because explicit images are now provided for active states */
+
+.sidebar-text {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+.sidebar-user-profile {
+    width: 192px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.sidebar-user-avatar {
+    width: 44px;
+    height: 44px;
+    background: #595959;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sidebar-user-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    overflow: hidden;
+}
+
+.sidebar-user-name {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px; /* Adjusted to fit better */
+    line-height: 20px;
+    color: #1C1B1F;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-email {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px; /* Adjusted to fit better */
+    line-height: 15px;
+    color: #1C1B1F;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
