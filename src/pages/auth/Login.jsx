@@ -1,16 +1,34 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { MdAdminPanelSettings } from 'react-icons/md';
 
 export default function Login() {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Here you would normally add authentication logic
-        // For now, we simulate a successful login and navigate to the dashboard
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/login', {
+                email: email,
+                password: password
+            });
+
+            localStorage.setItem('auth_token', response.data.access_token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+
+            console.log("Login successful!");
+            
+            // Send them through the Unified Door!
+            if (response.data.user.role === 'admin') navigate('/admin-dashboard');
+            else navigate('/dashboard');
+
+        } catch (error) {
+            console.error("Login failed!", error);
+        }
+    
         navigate('/');
     };
 
@@ -33,11 +51,11 @@ export default function Login() {
                 {/* Form */}
                 <form onSubmit={handleLogin} className="flex flex-col gap-4">
                     <input 
-                        type="text" 
-                        placeholder="username" 
+                        type="email" 
+                        placeholder="Email" 
                         className="bg-[#D9D9D9] text-gray-800 placeholder-gray-500 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 w-full font-medium"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     

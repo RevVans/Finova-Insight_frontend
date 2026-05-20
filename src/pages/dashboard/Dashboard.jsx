@@ -1,10 +1,36 @@
 import React from 'react';
+import axios from 'axios';
 import Sidebar from '../../components/layout/Sidebar';
 import StatCard from '../../components/dashboard/StatCard';
 import RevenueBarChart from '../../components/dashboard/RevenueBarChart';
 import PortfolioPieChart from '../../components/dashboard/PortfolioPieChart';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const token = localStorage.getItem('auth_token');
+
+        if (!token) return navigate('/login');
+
+        try {
+            await axios.post('http://127.0.0.1:8000/api/logout', {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
+            });
+
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user');
+            navigate('/login'); // Kick them back to the login screen!
+
+        } catch (error) {
+            console.error("Logout failed!", error);
+        }
+    };
+
     return (
         <div className="flex bg-[#F8F9FA] min-h-screen">
             <Sidebar />
