@@ -33,8 +33,6 @@ export default function Login() {
         } catch (error) {
             console.error("Login failed!", error);
         }
-    
-        navigate('/');
     };
 
     return (

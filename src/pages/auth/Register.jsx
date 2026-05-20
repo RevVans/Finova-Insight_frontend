@@ -1,23 +1,41 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../config/api';
 
 export default function Register() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    
     const navigate = useNavigate();
-    const [form, setForm] = useState({
-        username: '',
-        email: '',
-        password: '',
-        konfirmasiPassword: '',
-    });
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        // Add registration logic here
-        navigate('/login');
+
+        if (password !== passwordConfirmation) {
+        console.error("The passwords do not match!");
+        alert("Make sure your passwords match!");
+        return;
+    }
+        try {
+            // 2. Send the registration payload to Laravel
+            await api.post('/register', {
+                name: name,
+                email: email,
+                password: password,
+                password_confirmation: passwordConfirmation
+            });
+
+            console.log("Account created successfully!");
+            
+            // 3. The Flow You Wanted: Kick them to the login page!
+            navigate('/login'); 
+
+        } catch (error) {
+            // If they type a short password or an email that already exists, it lands here.
+            console.error("Registration failed!", error.response?.data || error.message);
+        }
     };
 
     return (
@@ -37,41 +55,41 @@ export default function Register() {
                 <form onSubmit={handleRegister} className="flex flex-col gap-4">
                     <input
                         type="text"
-                        name="username"
-                        placeholder="username"
+                        name="name"
+                        placeholder="Nama"
                         className="bg-[#D9D9D9] text-gray-800 placeholder-gray-500 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 w-full font-medium"
-                        value={form.username}
-                        onChange={handleChange}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                     />
 
                     <input
                         type="email"
                         name="email"
-                        placeholder="email"
+                        placeholder="Alamat Email"
                         className="bg-[#D9D9D9] text-gray-800 placeholder-gray-500 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 w-full font-medium"
-                        value={form.email}
-                        onChange={handleChange}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                     />
 
                     <input
                         type="password"
                         name="password"
-                        placeholder="pasword"
+                        placeholder="Password"
                         className="bg-[#D9D9D9] text-gray-800 placeholder-gray-500 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 w-full font-medium"
-                        value={form.password}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                     />
 
                     <input
                         type="password"
                         name="konfirmasiPassword"
-                        placeholder="konfirmasi password"
+                        placeholder="Konfirmasi Password"
                         className="bg-[#D9D9D9] text-gray-800 placeholder-gray-500 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 w-full font-medium"
-                        value={form.konfirmasiPassword}
-                        onChange={handleChange}
+                        value={passwordConfirmation}
+                        onChange={(e) => setPasswordConfirmation(e.target.value)}
                         required
                     />
 
