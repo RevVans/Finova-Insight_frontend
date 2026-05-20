@@ -4,9 +4,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { MdAdminPanelSettings } from 'react-icons/md';
 
 export default function Login() {
-    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -22,8 +23,12 @@ export default function Login() {
             console.log("Login successful!");
             
             // Send them through the Unified Door!
-            if (response.data.user.role === 'admin') navigate('/admin-dashboard');
-            else navigate('/dashboard');
+            if (response.data.user.role === 'admin') {
+                navigate('/admin-dashboard');
+            } 
+            else {
+                navigate('/');
+            }
 
         } catch (error) {
             console.error("Login failed!", error);

@@ -3,6 +3,7 @@ import Login from '../pages/auth/Login';
 import AdminLogin from '../pages/auth/AdminLogin';
 import Register from '../pages/auth/Register';
 import Dashboard from '../pages/dashboard/Dashboard';
+import AdminDashboard from '../pages/admin/AdminDashboard';
 
 import Keuangan from '../pages/transactions/Keuangan';
 import Investasi from '../pages/investments/Investasi';
@@ -16,6 +17,7 @@ export default function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
             {/* Main Application Routes */}
             <Route path="/" element={<Dashboard />} />
