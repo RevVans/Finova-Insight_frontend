@@ -9,6 +9,7 @@ import Keuangan from '../pages/transactions/Keuangan';
 import Investasi from '../pages/investments/Investasi';
 import Tabungan from '../pages/savings/Tabungan';
 import Aset from '../pages/assets/Aset';
+import LiteracyHub from '../pages/literacy/LiteracyHub';
 
 export default function AppRouter() {
     return (
@@ -25,6 +26,7 @@ export default function AppRouter() {
             <Route path="/investasi" element={<Investasi />} />
             <Route path="/tabungan" element={<Tabungan />} />
             <Route path="/aset" element={<Aset />} />
+            <Route path="/literasi" element={<LiteracyHub />} />
 
             {/* Fallback route for 404 Not Found */}
             <Route path="*" element={<div className="p-10 text-center text-xl">404 - Page Not Found, Baka!</div>} />

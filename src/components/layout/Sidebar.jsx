@@ -86,6 +86,21 @@ const Sidebar = () => {
                             </div>
                         )}
                     </NavLink>
+
+                    <NavLink to="/literasi">
+                        {({ isActive }) => (
+                            <div className={isActive ? "sidebar-item active" : "sidebar-item"}>
+                                <div className="sidebar-icon-box">
+                                    <img 
+                                        src={isActive ? "/Icon/Literasi putih (active).svg" : "/Icon/Literasi dark.svg"} 
+                                        alt="Literasi" 
+                                        className="sidebar-icon no-invert" 
+                                    />
+                                </div>
+                                <span className="sidebar-text">Literasi Keuangan</span>
+                            </div>
+                        )}
+                    </NavLink>
                 </div>
                 
                 <div className="sidebar-user-profile">
