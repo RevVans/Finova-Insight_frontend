@@ -4,7 +4,8 @@ import AdminLogin from '../pages/auth/AdminLogin';
 import Register from '../pages/auth/Register';
 import Dashboard from '../pages/dashboard/Dashboard';
 import AdminDashboard from '../pages/admin/AdminDashboard';
-
+import ForgotPassword from '../pages/auth/ForgotPassword';
+import ResetPassword from '../pages/auth/ResetPassword';
 import Keuangan from '../pages/transactions/Keuangan';
 import Investasi from '../pages/investments/Investasi';
 import Tabungan from '../pages/savings/Tabungan';
@@ -14,13 +15,15 @@ export default function AppRouter() {
     return (
         <Routes>
             {/* Public Authentication Routes */}
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/password-reset/:token" element={<ResetPassword />} />
 
             {/* Main Application Routes */}
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/keuangan" element={<Keuangan />} />
             <Route path="/investasi" element={<Investasi />} />
             <Route path="/tabungan" element={<Tabungan />} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../../components/layout/Sidebar';
 import StatCard from '../../components/dashboard/StatCard';
@@ -6,37 +6,51 @@ import RevenueBarChart from '../../components/dashboard/RevenueBarChart';
 import PortfolioPieChart from '../../components/dashboard/PortfolioPieChart';
 import { useNavigate } from 'react-router-dom';
 
+const formatRupiah = (num) => {
+    const isNegative = num < 0;
+    const absoluteValue = Math.abs(num ?? 0);
+    return (isNegative ? '-Rp' : 'Rp') + absoluteValue.toLocaleString('id-ID');
+};
+
 export default function Dashboard() {
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        const token = localStorage.getItem('auth_token');
+    const [dashboardData, setDashboardData] = useState({
+        total_saldo: 0,
+        total_pemasukan: 0,
+        total_pengeluaran: 0,
+        bar_chart: [],
+        pie_chart: []
+    });
+    const [loading, setLoading] = useState(true);
 
-        if (!token) return navigate('/login');
-
-        try {
-            await axios.post('http://127.0.0.1:8000/api/logout', {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/json'
+    useEffect(() => {
+        const fetchDashboard = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/dashboard`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (response.data.success) {
+                    setDashboardData(response.data.data);
                 }
-            });
+            } catch (error) {
+                console.error('Failed to fetch dashboard data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user');
-            navigate('/login'); // Kick them back to the login screen!
+        fetchDashboard();
+    }, []);
 
-        } catch (error) {
-            console.error("Logout failed!", error);
-        }
-    };
+    if (loading) return <div className="flex p-10">Memuat Dashboard...</div>;
 
     return (
         <div className="flex bg-[#F8F9FA] min-h-screen">
             <Sidebar />
             
             <main className="flex-1 p-10 overflow-y-auto">
-                <h1 className="text-4xl font-bold text-black mb-8">Selamat Datang, Sayang</h1>
+                <h1 className="text-4xl font-bold text-black mb-8">Selamat Datang</h1>
                 
                 <div className="flex flex-col gap-6 max-w-[1100px]">
                     {/* Top Row: Cards */}
@@ -45,7 +59,7 @@ export default function Dashboard() {
                         <div className="md:col-span-2 h-full">
                             <StatCard 
                                 title="Total Saldo" 
-                                amount="Rp10.000.000" 
+                                amount={formatRupiah(dashboardData.total_saldo)} 
                                 variant="large" 
                             />
                         </div>
@@ -55,13 +69,13 @@ export default function Dashboard() {
                             <div className="flex-1">
                                 <StatCard 
                                     title="Pemasukan" 
-                                    amount="Rp10.000.000" 
+                                    amount={formatRupiah(dashboardData.total_pemasukan)} 
                                 />
                             </div>
                             <div className="flex-1">
                                 <StatCard 
                                     title="Pengeluaran" 
-                                    amount="Rp10.000.000" 
+                                    amount={formatRupiah(dashboardData.total_pengeluaran)} 
                                 />
                             </div>
                         </div>
@@ -70,10 +84,10 @@ export default function Dashboard() {
                     {/* Bottom Row: Charts */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="w-full">
-                            <RevenueBarChart />
+                            <RevenueBarChart chartData={dashboardData.bar_chart} />
                         </div>
                         <div className="w-full">
-                            <PortfolioPieChart />
+                            <PortfolioPieChart chartData={dashboardData.pie_chart} />
                         </div>
                     </div>
                 </div>

@@ -7,17 +7,19 @@ export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    
+    const [errors, setErrors] = useState({});
+
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setErrors({});
 
         if (password !== passwordConfirmation) {
-        console.error("The passwords do not match!");
-        alert("Make sure your passwords match!");
-        return;
-    }
+            setErrors({ password_confirmation: ["The passwords do not match!"] });
+            return;
+
+        }
         try {
             // 2. Send the registration payload to Laravel
             await api.post('/register', {
@@ -28,13 +30,16 @@ export default function Register() {
             });
 
             console.log("Account created successfully!");
-            
+
             // 3. The Flow You Wanted: Kick them to the login page!
-            navigate('/login'); 
+            navigate('/');
 
         } catch (error) {
-            // If they type a short password or an email that already exists, it lands here.
-            console.error("Registration failed!", error.response?.data || error.message);
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors); // Save Laravel's complaints to state
+            } else {
+                console.error("Something else broke!", error);
+            }
         }
     };
 
@@ -62,6 +67,7 @@ export default function Register() {
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
+                    {errors.name && <p style={{ color: 'red', fontSize: '12px', margin: '0 0 10px 0' }}>{errors.name[0]}</p>}
 
                     <input
                         type="email"
@@ -72,6 +78,7 @@ export default function Register() {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
+                    {errors.email && <p style={{ color: 'red', fontSize: '12px', margin: '0 0 10px 0' }}>{errors.email[0]}</p>}
 
                     <input
                         type="password"
@@ -82,6 +89,7 @@ export default function Register() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    {errors.password && <p style={{ color: 'red', fontSize: '12px', margin: '0 0 10px 0' }}>{errors.password[0]}</p>}
 
                     <input
                         type="password"
@@ -92,6 +100,7 @@ export default function Register() {
                         onChange={(e) => setPasswordConfirmation(e.target.value)}
                         required
                     />
+                    {errors.password_confirmation && <p style={{ color: 'red', fontSize: '12px', margin: '0 0 10px 0' }}>{errors.password_confirmation[0]}</p>}
 
                     <button
                         type="submit"

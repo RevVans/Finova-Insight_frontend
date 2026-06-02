@@ -12,12 +12,12 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/login', {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/login`, {
                 email: email,
                 password: password
             });
 
-            localStorage.setItem('auth_token', response.data.access_token);
+            localStorage.setItem('token', response.data.access_token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
             console.log("Login successful!");
@@ -27,7 +27,7 @@ export default function Login() {
                 navigate('/admin-dashboard');
             } 
             else {
-                navigate('/');
+                navigate('/dashboard');
             }
 
         } catch (error) {
@@ -37,11 +37,6 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-[#E5F3EE] flex items-center justify-center relative p-4">
-            {/* Bottom Left Shield Icon */}
-            <div className="absolute bottom-8 left-8 text-black">
-                <MdAdminPanelSettings className="w-12 h-12" />
-            </div>
-
             <div className="bg-white rounded-xl shadow-md border border-gray-100 p-10 w-full max-w-[450px]">
                 {/* Logo */}
                 <div className="flex justify-center mb-6">
@@ -70,6 +65,8 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+
+                    <Link to="/forgot-password" className="text-sm text-black hover:underline font-medium">Forgot Password?</Link>
 
                     <button 
                         type="submit" 

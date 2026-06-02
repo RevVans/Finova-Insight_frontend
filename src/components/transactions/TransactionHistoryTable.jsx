@@ -32,8 +32,9 @@ const TransactionHistoryTable = ({ transactions, onTambah, onHapus }) => {
                     <thead>
                         <tr className="border-b border-gray-300">
                             <th className="py-3 px-6 font-medium text-gray-500 w-1/4">Tanggal</th>
-                            <th className="py-3 px-6 font-medium text-gray-500 w-1/4">Kategori</th>
+                            <th className="py-3 px-6 font-medium text-gray-500 w-1/4">Tipe</th>
                             <th className="py-3 px-6 font-medium text-gray-500 w-1/4">Nominal</th>
+                            <th className="py-3 px-6 font-medium text-gray-500 w-1/4">Kategori</th>
                             <th className="py-3 px-6 font-medium text-gray-500 w-1/4">Deskripsi</th>
                             {isDeleteMode && <th className="py-3 px-6 font-medium text-gray-500 w-16 text-center">Aksi</th>}
                         </tr>
@@ -42,8 +43,9 @@ const TransactionHistoryTable = ({ transactions, onTambah, onHapus }) => {
                         {transactions.map((tx, index) => (
                             <tr key={index} className="border-b border-gray-300 last:border-b-0">
                                 <td className="py-4 px-6 text-black">{tx.date}</td>
-                                <td className="py-4 px-6 text-black">{tx.category}</td>
+                                <td className="py-4 px-6 text-black">{tx.type}</td>
                                 <td className="py-4 px-6 text-black">{tx.amount}</td>
+                                <td className="py-4 px-6 text-black">{tx.category}</td>
                                 <td className="py-4 px-6 text-black">{tx.description}</td>
                                 {isDeleteMode && (
                                     <td className="py-4 px-6 text-center">

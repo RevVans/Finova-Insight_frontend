@@ -5,7 +5,7 @@ const StatCard = ({ title, amount, variant = 'default' }) => {
         return (
             <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col justify-between h-full min-h-[220px] shadow-sm">
                 <h3 className="text-gray-700 font-medium text-lg">{title}</h3>
-                <div className="text-4xl font-bold text-black mt-auto">{amount}</div>
+                <div className="text-5xl font-bold text-black mt-auto">{amount}</div>
             </div>
         );
     }
