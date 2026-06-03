@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // 💡 Added Axios import
+import axios from 'axios';
 import Sidebar from '../../components/layout/Sidebar';
+import Swal from 'sweetalert2';
 import TransactionHistoryTable from '../../components/transactions/TransactionHistoryTable';
 import RevenueBarChart from '../../components/dashboard/RevenueBarChart';
 import TambahTransaksiModal from '../../components/transactions/TambahTransaksiModal/TambahTransaksiModal';
@@ -31,7 +32,7 @@ export default function Keuangan() {
                     type: tx.type === 'income' ? 'Pemasukan' : 'Pengeluaran',
                     category: tx.category ? tx.category.name : 'Umum',
                     amount: 'Rp' + parseInt(tx.amount, 10).toLocaleString('id-ID'),
-                    description: tx.desc || 'Tanpa Deskripsi'
+                    description: tx.desc || '-'
                 }));
                 setTransactionList(mappedTx);
             }
@@ -54,35 +55,66 @@ export default function Keuangan() {
             });
 
             if (response.data.success) {
-                alert('Transaksi berhasil disimpan!');
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Transaksi berhasil disimpan!',
+                    icon: 'success',
+                    timer: 2500,
+                    showConfirmButton: false,
+                    willClose: () => {
+                    }
+                });
                 fetchTransactionHistory();
                 setShowModal(false);
             }
         } catch (error) {
             console.error('Validation errors:', error.response?.data || error.message);
-            alert('Gagal menyimpan transaksi. Periksa kembali data Anda.');
-        }
-    };
-
-    const handleHapusTransaksi = async (id) => {
-        if (!window.confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) return;
-
-        try {
-            // 💡 Refactored to Axios DELETE
-            const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/transactions/${id}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            Swal.fire({
+                icon: "error",
+                title: "Gagal Menyimpan!",
+                text: "Terjadi kesalahan pada sistem kami. Silakan coba beberapa saat lagi.",
             });
-
-            if (response.data.success) {
-                setTransactionList((prev) => prev.filter((tx) => tx.id !== id));
-            } else {
-                alert('Gagal menghapus data dari server.');
-            }
-        } catch (error) {
-            console.error('Error deleting transaction:', error.response?.data || error.message);
-            alert('Gagal menghubungi server.');
         }
     };
+
+    const handleHapusTransaksi = (id) => {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Transaksi ini akan dihapus permanen dari riwayat!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                try {
+                    // 💡 Refactored to Axios DELETE
+                    const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/transactions/${id}`, {
+                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    });
+
+                    if (response.data.success) {
+                        Swal.fire({
+                            title: 'Dihapus!',
+                            text: 'Transaksi telah berhasil dihapus.',
+                            icon: 'success',
+                            timer: 2500,
+                            showConfirmButton: false
+                        });
+                        setTransactionList((prev) => prev.filter((tx) => tx.id !== id));
+                    } else {
+                        alert('Gagal menghapus data dari server.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting transaction:', error.response?.data || error.message);
+                    Swal.fire('Gagal!', 'Terjadi kesalahan pada sistem kami. Silakan coba beberapa saat lagi.', 'error');
+                }
+            }
+        });
+    }
 
     return (
         <div className="flex bg-[#F8F9FA] min-h-screen">
@@ -92,17 +124,12 @@ export default function Keuangan() {
                 <h1 className="text-4xl font-bold text-black mb-8">Manajemen Keuangan</h1>
 
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 max-w-[1300px]">
-                    <div className="xl:col-span-2">
+                    <div className="xl:col-span-3">
                         <TransactionHistoryTable
                             transactions={transactionList}
                             onTambah={() => setShowModal(true)}
                             onHapus={handleHapusTransaksi}
                         />
-                    </div>
-                    <div className="xl:col-span-1">
-                        <div className="h-full">
-                            <RevenueBarChart />
-                        </div>
                     </div>
                 </div>
             </main>

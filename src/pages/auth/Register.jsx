@@ -21,7 +21,7 @@ export default function Register() {
 
         }
         try {
-            // 2. Send the registration payload to Laravel
+            //Send the registration payload to Laravel
             await api.post('/register', {
                 name: name,
                 email: email,
@@ -30,13 +30,11 @@ export default function Register() {
             });
 
             console.log("Account created successfully!");
-
-            // 3. The Flow You Wanted: Kick them to the login page!
             navigate('/');
 
         } catch (error) {
             if (error.response && error.response.status === 422) {
-                setErrors(error.response.data.errors); // Save Laravel's complaints to state
+                setErrors(error.response.data.errors);
             } else {
                 console.error("Something else broke!", error);
             }
@@ -104,7 +102,7 @@ export default function Register() {
 
                     <button
                         type="submit"
-                        className="bg-[#1C1B1F] text-white font-medium px-4 py-3 rounded-md hover:bg-black transition-colors mt-2"
+                        className="bg-blue-600 text-white font-medium px-4 py-3 rounded-md hover:bg-blue-700 transition-colors mt-2"
                     >
                         Daftar
                     </button>

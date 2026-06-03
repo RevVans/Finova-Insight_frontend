@@ -30,7 +30,7 @@ export default function SavingCard({ item, onAction, onDelete }) {
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between h-full relative group">
             <button
                 onClick={() => onDelete(item.id)}
-                className="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50"
+                className="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50"
                 title="Hapus Tabungan"
             >
                 <FaTrash size={14} />

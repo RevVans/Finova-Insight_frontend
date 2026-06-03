@@ -4,7 +4,7 @@ import api from '../../config/api';
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('');
-    const [status, setStatus] = useState(''); // To show the green success message!
+    const [status, setStatus] = useState('');
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (e) => {
@@ -13,7 +13,6 @@ export default function ForgotPassword() {
         setStatus('');
 
         try {
-            // Tell Laravel to send the email!
             const response = await api.post('/forgot-password', { email: email });
 
             // Laravel usually returns a 'status' message when successful
@@ -35,8 +34,8 @@ export default function ForgotPassword() {
                 <div className="flex justify-center mb-6">
                     <img src="/Logo/Frame 57.png" alt="Finova Insight" className="h-16 object-contain" />
                 </div>
-                <h2 className="text-2xl font-bold text-center text-black mb-2 tracking-wide">Forgot Your Password?</h2>
-                <p className="text-sm text-center text-gray-600 mb-6 font-medium">Enter your email and we will send you a reset link.</p>
+                <h2 className="text-2xl font-bold text-center text-black mb-2 tracking-wide">Lupa Password?</h2>
+                <p className="text-sm text-center text-gray-600 mb-6 font-medium">Masukkan email dan kami akan mengirimkan link reset.</p>
 
                 {/* The Green Success Message */}
                 {status && <div className="text-green-600 text-sm text-center mb-4 font-medium">{status}</div>}
@@ -59,12 +58,12 @@ export default function ForgotPassword() {
                     type="submit"
                     className="bg-[#1C1B1F] text-white font-medium px-4 py-3 rounded-md hover:bg-black transition-colors w-full"
                     >
-                        Send Reset Link
+                        Kirim Link Reset
                     </button>
                 </form>
 
                 <div className="mt-6 text-center">
-                    <Link to="/login" className="text-sm text-black hover:underline font-medium">Wait, I remembered it! Go back to Login.</Link>
+                    <Link to="/" className="text-sm text-black hover:underline font-medium">Sudah ingat? Kembali ke login.</Link>
                 </div>
             </div>
 

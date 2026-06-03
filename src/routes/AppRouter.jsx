@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from '../pages/auth/Login';
-import AdminLogin from '../pages/auth/AdminLogin';
 import Register from '../pages/auth/Register';
 import Dashboard from '../pages/dashboard/Dashboard';
 import AdminDashboard from '../pages/admin/AdminDashboard';
@@ -16,7 +15,6 @@ export default function AppRouter() {
         <Routes>
             {/* Public Authentication Routes */}
             <Route path="/" element={<Login />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

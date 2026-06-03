@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 export default function TambahTransaksiModal({ onClose, onSimpan }) {
     // 1. Core form fields matching Laravel's validation criteria
@@ -46,7 +47,11 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!date || !nominal || !categoryId) {
-            alert('Semua field wajib diisi!');
+            Swal.fire({
+                text: "Semua field wajib diisi!",
+                icon: "warning",
+                confirmButtonColor: "#3b82f6"
+            });
             return;
         }
 
@@ -66,7 +71,7 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-xl font-bold text-gray-900">Tambah Riwayat Transaksi</h3>
@@ -100,7 +105,7 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
                             type="date"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:outline-none"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:outline-blue-500"
                         />
                     </div>
 
@@ -112,7 +117,7 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
                             <select
                                 value={categoryId}
                                 onChange={(e) => setCategoryId(e.target.value)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:outline-none"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:outline-blue-500"
                             >
                                 {categories.map((cat) => (
                                     <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -130,7 +135,7 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
                                 value={nominal}
                                 onChange={handleNominalChange}
                                 placeholder="0"
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-gray-800 font-medium focus:outline-none"
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-gray-800 font-medium focus:outline-blue-500"
                             />
                         </div>
                     </div>
@@ -142,7 +147,7 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Catatan tambahan..."
                             rows="2"
-                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:outline-none resize-none"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-700 focus:outline-blue-500 resize-none"
                         />
                     </div>
 
@@ -150,13 +155,13 @@ export default function TambahTransaksiModal({ onClose, onSimpan }) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 border border-gray-200 rounded-xl py-2.5 font-semibold text-gray-500 hover:bg-gray-50"
+                            className="flex-1 border border-gray-200 rounded-xl py-2.5 font-semibold text-gray-500 hover:bg-gray-100"
                         >
                             Batal
                         </button>
                         <button
                             type="submit"
-                            className="flex-1 bg-[#7C3AED] text-white rounded-xl py-2.5 font-semibold hover:bg-[#6D28D9]"
+                            className="flex-1 bg-blue-500 text-white rounded-xl py-2.5 font-semibold hover:bg-blue-700"
                         >
                             Simpan
                         </button>

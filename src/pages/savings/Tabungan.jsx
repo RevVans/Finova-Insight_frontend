@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import Sidebar from '../../components/layout/Sidebar';
 import SavingCard from '../../components/savings/SavingCard';
 import BuatTabunganModal from '../../components/savings/BuatTabunganModal/BuatTabunganModal';
@@ -22,18 +23,12 @@ const CATEGORY_CONFIG = {
     Umum: { label: 'Tabungan Umum', color: 'bg-gray-100 text-gray-700', Icon: FaPiggyBank }
 };
 
-// 💡 Initial Mock Data
-const initialSavings = [
-    { id: 1, name: 'PlayStation', type: 'Elektronik', current_amount: 1500000, target_amount: 7500000, deadline_date: '2026-09-10' },
-    { id: 2, name: 'Kendaraan', type: 'Otomotif', current_amount: 15000000, target_amount: 240000000, deadline_date: '2027-08-10' },
-    { id: 3, name: 'Laptop', type: 'Elektronik', current_amount: 2000000, target_amount: 12000000, deadline_date: '2026-10-10' }
-];
-
 export default function Tabungan() {
     const [savingsList, setSavingsList] = useState([]); // 💡 Start empty!
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [actionModal, setActionModal] = useState({ isOpen: false, item: null, mode: 'deposit' });
     const [actionNominal, setActionNominal] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('Dana');
 
     // 💡 1. Fetch data from Laravel on load
     useEffect(() => {
@@ -72,7 +67,7 @@ export default function Tabungan() {
             }
         } catch (error) {
             console.error("Gagal membuat tabungan:", error.response?.data || error.message);
-            alert("Terjadi kesalahan saat membuat tabungan!");
+            Swal.fire('Gagal!', 'Terjadi kesalahan pada sistem kami. Silakan coba beberapa saat lagi.', 'error');
         }
     };
 
@@ -122,29 +117,51 @@ export default function Tabungan() {
         } catch (error) {
             console.error("Gagal memproses transaksi:", error.response?.data || error.message);
             // Show the exact error message from Laravel (like "Saldo tidak mencukupi")
-            alert(error.response?.data?.message || "Terjadi kesalahan sistem!");
+            Swal.fire('Gagal!', 'Nominal penarikan melebihi tabungan anda.', 'error');
         }
     };
 
-    const handleHapusTabungan = async (id) => {
+    const handleHapusTabungan = (id) => {
         // Add a safety check so users don't accidentally delete their data!
-        if (!window.confirm('Apakah Anda yakin ingin menghapus tabungan ini?')) return;
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Transaksi ini akan dihapus permanen dari riwayat!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
 
-        try {
-            const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/savings/${id}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            });
+                try {
+                    const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/savings/${id}`, {
+                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    });
 
-            if (response.data.success) {
-                // Instantly filter out the deleted ID from the UI array!
-                setSavingsList(prev => prev.filter(saving => saving.id !== id));
+                    if (response.data.success) {
+                        Swal.fire({
+                            title: 'Dihapus!',
+                            text: 'Tabungan telah berhasil dihapus.',
+                            icon: 'success',
+                            timer: 2500,
+                            showConfirmButton: false
+                        });
+                        setSavingsList(prev => prev.filter(saving => saving.id !== id));
+                    }
+                } catch (error) {
+                    console.error("Gagal menghapus tabungan:", error.response?.data || error.message);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Tabungan tidak bisa dihapus karena masih ada saldo! Tarik semua dana terlebih dahulu.",
+                        confirmButtonColor: '#3085d6',
+                    });
+                }
             }
-        } catch (error) {
-            console.error("Gagal menghapus tabungan:", error.response?.data || error.message);
-            // 💡 Now it will show the specific Laravel error if the safe isn't empty!
-            alert(error.response?.data?.message || "Gagal menghapus tabungan dari server.");
-        }
-    };
+        });
+    }
 
     return (
         <div className="flex bg-[#F8F9FA] min-h-screen">
@@ -155,7 +172,7 @@ export default function Tabungan() {
                 <div className="flex flex-col gap-8 max-w-[1100px]">
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="w-full bg-[#1C1B1F] text-white py-4 rounded-full text-xl font-medium hover:bg-black transition-colors"
+                        className="w-full bg-blue-600 text-white py-2 rounded-full text-xl font-medium hover:bg-blue-700 transition-colors"
                     >
                         Buat Tabungan
                     </button>
@@ -186,7 +203,7 @@ export default function Tabungan() {
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
                     <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl border-2 border-slate-200">
                         <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            {actionModal.mode === 'deposit' ? '💰 Tabung:' : '💸 Tarik:'} <span className="text-emerald-600">{actionModal.item.name}</span>
+                            {actionModal.mode === 'deposit' ? 'Tabung:' : 'Tarik:'} <span className="text-emerald-600">{actionModal.item.name}</span>
                         </h2>
                         <form onSubmit={handleActionSubmit} className="space-y-4">
                             <div>
@@ -200,6 +217,21 @@ export default function Tabungan() {
                                     onChange={handleActionNominalChange}
                                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium text-slate-800"
                                 />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Metode Pembayaran
+                                </label>
+                                <select
+                                    value={paymentMethod}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="bg-white border border-gray-200 text-gray-800 px-4 py-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full font-medium appearance-none"
+                                >
+                                    <option value="Dana">DANA</option>
+                                    <option value="Gopay">GoPay</option>
+                                    <option value="Ovo">OVO</option>
+                                    <option value="ShopeePay">ShopeePay</option>
+                                </select>
                             </div>
                             <div className="flex justify-end gap-3 pt-4">
                                 <button

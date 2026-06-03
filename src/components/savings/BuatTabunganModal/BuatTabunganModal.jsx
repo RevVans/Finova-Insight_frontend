@@ -34,15 +34,15 @@ export default function BuatTabunganModal({ onClose, onSimpan }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm" onClick={onClose}>
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-[700px] mx-4 p-8 border-2 border-[#7C3AED]" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-[700px] mx-4 p-8" onClick={(e) => e.stopPropagation()}>
                 <h2 className="text-2xl font-bold text-black mb-6">Buat Tabungan</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-2 gap-4 mb-4">
-                        <input type="text" name="nama" placeholder="Nama" value={form.nama} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-400 w-full" />
-                        <input type="text" name="nominal" placeholder="Nominal" value={form.nominal} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-400 w-full" />
+                        <input type="text" name="nama" placeholder="Nama" value={form.nama} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:outline-blue-500 w-full" />
+                        <input type="text" name="nominal" placeholder="Nominal" value={form.nominal} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:outline-blue-500 w-full" />
                     </div>
                     <div className="grid grid-cols-2 gap-4 mb-8">
-                        <select name="type" value={form.type} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-400 w-full">
+                        <select name="type" value={form.type} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:outline-blue-500 w-full">
                             <option value="Umum">Tabungan Umum</option>
                             <option value="Elektronik">Gadget & Barang Elektronik</option>
                             <option value="Otomotif">Kendaraan & Otomotif</option>
@@ -50,11 +50,11 @@ export default function BuatTabunganModal({ onClose, onSimpan }) {
                             <option value="Hobi">Hiburan & Hobi</option>
                             <option value="Darurat">Dana Darurat</option>
                         </select>
-                        <input type="date" name="tenggat" value={form.tenggat} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:ring-2 focus:ring-purple-400 w-full" />
+                        <input type="date" name="tenggat" value={form.tenggat} onChange={handleChange} required className="bg-[#E0E0E0] text-gray-800 px-4 py-3 rounded-lg focus:outline-blue-500 w-full" />
                     </div>
                     <div className="flex justify-end gap-3">
                         <button type="button" onClick={onClose} className="px-6 py-2.5 rounded-lg border border-black text-black font-medium hover:bg-gray-50">Batal</button>
-                        <button type="submit" className="px-6 py-2.5 rounded-lg bg-[#1C1B1F] text-white font-medium hover:bg-black">Simpan</button>
+                        <button type="submit" className="px-6 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700">Simpan</button>
                     </div>
                 </form>
             </div>

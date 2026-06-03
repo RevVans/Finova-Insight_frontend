@@ -13,14 +13,14 @@ const TransactionHistoryTable = ({ transactions, onTambah, onHapus }) => {
                         className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
                             isDeleteMode 
                                 ? 'bg-red-500 text-white hover:bg-red-600' 
-                                : 'border border-black bg-white text-black hover:bg-gray-50'
+                                : 'bg-gray-200 text-black hover:bg-gray-300'
                         }`}
                     >
                         {isDeleteMode ? 'Selesai Hapus' : 'Hapus Riwayat'}
                     </button>
                     <button 
                         onClick={onTambah}
-                        className="bg-[#1C1B1F] text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-black transition-colors"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-blue-700 transition-colors"
                     >
                         Tambah Riwayat
                     </button>
